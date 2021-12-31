@@ -1,0 +1,98 @@
+﻿@model Support.Web.WWW.Models.ItemViewModel
+
+@{
+    ViewData["Title"] = "Run";
+}
+
+<h1>Run</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Run">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Module" class="control-label"></label>
+                <input asp-for="Module" class="form-control" />
+                <span asp-validation-for="Module" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="RetrunsData" /> @Html.DisplayNameFor(model => model.RetrunsData)
+                </label>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Parameters[0].Order)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Parameters[0].Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Parameters[0].DataType)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Parameters[0].MaxLength)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Parameters[0].Value)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Parameters)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Order)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DataType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MaxLength)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Value)
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                    </table>
+
+                    <div class="form-group">
+                        <input type="submit" value="Run" class="btn btn-primary" />
+                    </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
