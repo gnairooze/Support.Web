@@ -8,34 +8,41 @@
 
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form asp-action="Run">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Module" class="control-label"></label>
-                <input asp-for="Module" class="form-control" />
-                <span asp-validation-for="Module" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="RetrunsData" /> @Html.DisplayNameFor(model => model.RetrunsData)
-                </label>
-            </div>
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Id)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Id)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Module)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Module)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.RetrunsData)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.RetrunsData)
+                </dd>
+            </dl>
 
             <table class="table">
                 <thead>
@@ -61,38 +68,136 @@
                 <tbody>
                     @foreach (var item in Model.Parameters)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Order)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DataType)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.MaxLength)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Value)
-                            </td>
-                        </tr>
+                        @if (!item.IsOutput)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Order)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DataType)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MaxLength)
+                                </td>
+                                <td>
+                                    @Html.EditorFor(modelItem => item.Value)
+                                </td>
+                            </tr>
+                        }
+
                     }
-                    </tbody>
-                    </table>
+                </tbody>
+            </table>
 
-                    <div class="form-group">
-                        <input type="submit" value="Run" class="btn btn-primary" />
+            <div class="form-group">
+                <input type="submit" value="Run" class="btn btn-primary" />
+            </div>
+
+            <hr />
+            <h2>Result</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Parameters[0].Order)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Parameters[0].Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Parameters[0].DataType)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Parameters[0].MaxLength)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Parameters[0].Value)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Parameters)
+                    {
+                        @if (item.IsOutput)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Order)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DataType)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MaxLength)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Value)
+                                </td>
+                            </tr>
+                        }
+
+                    }
+                </tbody>
+            </table>
+            <hr />
+            @if (Model.RetrunsData)
+            {
+                if (Model.ResultData != null && Model.ResultData.Tables.Count > 0)
+                {
+                    <h3>Result Data</h3>
+                    @*start tables*@
+                    @for (int t = 0; t < Model.ResultData.Tables.Count; t++)
+                    {
+                        <div>
+                            <b>Table - @t</b>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    @*start columns*@
+                                    @for (int c = 0; c < Model.ResultData.Tables[t].Columns.Count; c++)
+                                    {
+                                        <th>
+                                            @Html.DisplayFor(model => model.ResultData.Tables[t].Columns[c].ColumnName)
+                                        </th>
+                                    }@*end columns*@
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @*start rows*@
+                                @for (int r = 0; r < Model.ResultData.Tables[t].Rows.Count; r++)
+                                {
+                                    <tr>
+                                        @*start values*@
+                                        @for (int v = 0; v < Model.ResultData.Tables[t].Rows[r].ItemArray.Length; v++)
+                                        {
+                                        <td>
+                                            @Model.ResultData.Tables[t].Rows[r].ItemArray[v]
+                                        </td>
+                                        }@*end values*@
+                                    </tr>
+                                }@*end rows*@
+                            </tbody>
+                        </table>
+                    }@*end tables*@
+                                }
+                            }
+                        </form>
                     </div>
-        </form>
-    </div>
-</div>
+                </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+                <div>
+                    <a asp-action="Index">Back to List</a>
+                </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+                @section Scripts {
+                    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+                }

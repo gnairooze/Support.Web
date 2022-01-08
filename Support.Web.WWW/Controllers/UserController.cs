@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Support.Web.WWW.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -61,7 +62,35 @@ namespace Support.Web.WWW.Controllers
                 new ParameterViewModel(){ DataType = "int", IsOutput = true, Name = "Result", Nullable = false, Order = 2}
             });
 
+            models[1].ResultData = GenerateDataSet();
             return models;
+        }
+
+        private static DataSet GenerateDataSet()
+        {
+            var dset = new DataSet();
+
+            dset.Tables.Add(new DataTable());
+            dset.Tables[0].Columns.AddRange(new DataColumn[] {
+                new DataColumn("ID"),
+                new DataColumn("Name"),
+                new DataColumn("CreateDate")
+            });
+
+            dset.Tables.Add(new DataTable());
+            dset.Tables[1].Columns.AddRange(new DataColumn[] {
+                new DataColumn("CorrelationID"),
+                new DataColumn("Module"),
+                new DataColumn("CreateDate")
+            });
+
+            dset.Tables[0].Rows.Add(new string[] { "1", "John", "2022-01-01" });
+            dset.Tables[0].Rows.Add(new string[] { "2", "Smith", "2022-01-02" });
+
+            dset.Tables[1].Rows.Add(new string[] { "01", "Login", "2022-01-03" });
+            dset.Tables[1].Rows.Add(new string[] { "02", "Log", "2022-01-04" });
+
+            return dset;
         }
     }
 }
